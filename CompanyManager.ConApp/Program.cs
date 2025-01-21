@@ -91,9 +91,13 @@ namespace CompanyManager.ConApp
             Console.WriteLine("Companies:");
             Console.WriteLine("----------");
 
-            foreach (var item in context.CompanySet)
+            foreach (var company in context.CompanySet.Include(e => e.Customers))
             {
-                Console.WriteLine($"{item}");
+                Console.WriteLine($"{company}");
+                foreach (var customer in company.Customers)
+                {
+                    Console.WriteLine($"{customer}");
+                }
             }
         }
 
@@ -117,7 +121,7 @@ namespace CompanyManager.ConApp
                     Console.WriteLine($"{company}");
                     foreach (var customer in company.Customers)
                     {
-                        Console.WriteLine($"\t{customer}");
+                        Console.WriteLine($"{customer}");
                     }
                 }
             }
@@ -235,20 +239,38 @@ namespace CompanyManager.ConApp
 
             var customer = new Logic.Entities.Customer();
 
-            Console.Write("Name [256]:          ");
+            Console.Write("Name [256]:   ");
             customer.Name = Console.ReadLine()!;
-            Console.Write("Email [1024]:      ");
+            Console.Write("Email [1024]: ");
             customer.Email = Console.ReadLine()!;
             Console.Write("Company name: ");
+            var count = 0; 
             var companyName = Console.ReadLine()!;
             var company = context.CompanySet.FirstOrDefault(x => x.Name == companyName);
 
-            if (company != null)
+            while (company == null && count < 3)
             {
-                customer.CompanyId = company.Id;
+                count++;
+   
+                Console.Write("Company name: ");
+                companyName = Console.ReadLine()!;
+                company = context.CompanySet.FirstOrDefault(x => x.Name == companyName);
             }
-            context.CustomerSet.Add(customer);
-            context.SaveChanges();
+            try
+            {
+                if (company != null)
+                {
+                    customer.CompanyId = company.Id;
+                    context.CustomerSet.Add(customer);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.Write("Continue with enter...");
+                Console.ReadLine();
+            }
         }
 
         /// <summary>
