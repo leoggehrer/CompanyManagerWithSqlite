@@ -41,7 +41,7 @@ namespace CompanyManager.Logic.Entities
         /// Copies properties from another employee.
         /// </summary>
         /// <param name="employee">The employee to copy properties from.</param>
-        public void CopyProperties(IEmployee employee)
+        public virtual void CopyProperties(IEmployee employee)
         {
             base.CopyProperties(employee);
 

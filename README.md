@@ -1,11 +1,11 @@
 # CompanyManager With SQLITE
 
-**Lernziele**
+**Lernziele:**
 
 - Wie mit dem **CodeFirst** Ansatz eine Datenbank erstellt wird.
 - Die Verknüpfung von Datenstrukturen und Datenbanken verstehen.
 - Wie **SQLite** als Datenbank mit dem EntityFramework verwendet wird.
-- Wie **Constraints** in einer Datenbank definiert werden.
+- Wie **Einschränkungen** (Contrains) in einer Datenbank definiert werden.
 
 **Hinweis:** Als Startpunkt wird die Vorlage [CompanyManager](https://github.com/leoggehrer/CompanyManager-Template) verwendet.
 
@@ -22,19 +22,29 @@ Bevor mit der Umsetzung begonnen wird, sollte die Vorlage heruntergeladen und di
 Um mit dem EntityFramework zu arbeiten, müssen die folgenden Packages installiert werden:
 
 - CompanyManager.Logic
-  - Microsoft.EntityFrameworkCore
-  - Microsoft.EntityFrameworkCore.Sqlite
+  - Microsoft.EntityFrameworkCore*
+  - Microsoft.EntityFrameworkCore.Sqlite**
 - CompanyManger.ConApp
-  - Microsoft.EntityFrameworkCore.Design
+  - Microsoft.EntityFrameworkCore.Design***
 
 Abhängig von der IDE kann dies über die Konsole oder über die GUI erfolgen. Sie finden eine Anleitung zum Installieren von Nuget-Packages [hier](https://github.com/leoggehrer/Slides/tree/main/NutgetInstall).
 
+*...Das ist die Basis-Bibliothek für den EntityFramework und muss immer inkludiert werden.
+**...Erweiterung zur Basis-Bibliothek für die Verwendung von SQLite.
+***...Diese Package ist für dei Erstellung und Aktuallisierung der Datenbank erforderlich.
+
 ### Erstellen der Entitäten
 
-1. Erstellen des Ordners **Entities** im Logik-Projekt.
-2. In diesem Ordner werden die **Entitäten** definiert:
-3. Erstellen der Entities **Company**, **Customer** und **Employee**.
-4. Diese Entitäten müssen die Schnittstellen im Ordner **Contracts** implementieren. Nachfolgend ein Beispiel für die **Company**-Entität:
+Entitäten sind Objekte oder Klassen, die eine eindeutige Identität besitzen und in einer Datenbank gespeichert werden können. Sie repräsentieren reale Objekte oder Konzepte aus der Anwendungsdomäne, wie z.B. Kunden, Bestellungen oder Produkte. In der objektorientierten Programmierung und im Entity Framework werden Entitäten verwendet, um Datenbanktabellen zu modellieren.
+
+In einem *Entity Framework Kontext* sind Entitäten Klassen, die die Struktur der Datenbanktabellen definieren. Jede Instanz einer Entität entspricht einer Zeile in der entsprechenden Tabelle. Entitäten enthalten Eigenschaften, die den Spalten der Tabelle entsprechen, und können Beziehungen zu anderen Entitäten haben.
+
+1. Erstellen des Ordners **Entities**
+Dieser Ordner wird im Projekt *CompanyManager.Logic* erstellt.
+2. Erstellen der Entitäten **Company**, **Customer** und **Employee** im Ordner *Entities*.
+Diese Entitäten müssen die entsprechende Schnittstelle aus dem Ordner **Contracts** implementieren.
+
+Nachfolgend ein Beispiel für die **Company**-Entität:
 
 ```csharp
 /// <summary>
@@ -64,7 +74,7 @@ public class Company : EntityObject, ICompany
     /// Copies the properties from another company instance.
     /// </summary>
     /// <param name="company">The company instance to copy properties from.</param>
-    public void CopyProperties(ICompany company)
+    public virtual void CopyProperties(ICompany company)
     {
         base.CopyProperties(company);
 
@@ -85,9 +95,14 @@ public class Company : EntityObject, ICompany
 }
 ```
 
-Diese Implementierung kann analog für die anderen Entitäten erfolgen.
+Diese Implementierung kann als Vorlage für die anderen Entitäten verwendet werden.
 
-5. Fügen Sie zusätzlich zu den Entitäten die **Navigationseigenschaften** hinzu. Nachfolgend ein Beispiel für die **Company**-Entität:
+**Erläuterung:**
+
+Die abstrakte Klasse `EntityObject` ist die Basisklasse für alle Entitäten. Sie beinhaltet die Eigenschaft `Id` (diese Eigenschaft müssen alle Entitäten bereitstellen) und eine Methode `public virtual void CopyProperties(IIdentifiable other)`.
+Die Klasse **Company** erbt die Eigenschaften und Methoden der Klasse `EntityObject` und ergänzt diese um weitere Eigenschaften und Methoden. Die Methoden `public virtual void CopyProperties(ICompany company)`und das Überschreiben der Methode `public override ToString()` ist für die Entität nicht erforderlich, sind aber im Verlauf für die weitere Entwicklung hilfreich.
+
+Fügen Sie zusätzlich zu den Entitäten die **Navigationseigenschaften** hinzu. Nachfolgend ein Beispiel für die **Company**-Entität:
 
 ```csharp
 /// <summary>
@@ -113,7 +128,7 @@ public class Company : EntityObject, ICompany
 ```
 
 Die Navigationseigenschaften müssen in allen Entitäten definiert werden und die entsprechenden Entitäten referenzieren. Alle Informationen zu Navigationseigenschaften finden Sie in der folgenden Tabelle:
- 
+
 | Komponente        | Relation | Komponente |
 | ----------------- | -------- | ---------- |
 | **Company**       | 1:n      | Customer   |
@@ -121,19 +136,39 @@ Die Navigationseigenschaften müssen in allen Entitäten definiert werden und di
 | **Customer**      | 1:0..1   | Company    |
 | **Employee**      | 1:0..1   | Company    |
 
-Das vollständige Entity-objektmodell ist in der nachfolgenden Abbildung abgebildet:
+Das vollständige *Entity-objektmodell* ist in der nachfolgenden Abbildung abgebildet:
 
-![Entity-Objektmodell](img/entities.png) 
+![Entity-Objektmodell](img/entities.png)
 
- 6. **Attribute** den Entitäten hinzufügen
+#### **Attribute** den Entitäten hinzufügen
 
 Attribute bei Entitäten sind essenziell, um die spezifischen Eigenschaften oder Merkmale der Entitäten in einem Datenmodell zu beschreiben. Sie liefern zusätzliche Informationen, die notwendig sind, um die Entitäten eindeutig zu identifizieren, ihre Eigenschaften zu speichern und ihre Beziehungen zu anderen Entitäten zu definieren. Weitere Informationen zu Attributen finden Sie [hier](https://www.learnentityframeworkcore.com/configuration/data-annotation-attributes).
 
+Die Schlüsseleigenschaft der Entität ist in der Klasse `EntityObject` definiert und kann daher mit dem Atribute `Key` ergänzt werden.
 
+```csharp
+  /// <summary>
+  /// Represents an abstract base class for entities with an identifier.
+  /// </summary>
+  public abstract class EntityObject : IIdentifiable
+  {
+      /// <summary>
+      /// Gets or sets the identifier of the entity.
+      /// </summary>
+      [System.ComponentModel.DataAnnotations.Key]
+      public int Id { get; set; }
+
+      ...
+  }
+```
+
+**Erläuterung:** Das Setzen des Attributes `Key` kann entfallen. Die Default-Bennung der Identät ist `Id` oder der Klassenname gefolgt von `Id` (EntityObjectId).
 
 Nachfolgend ein Beispiel für die **Company**-Entität:
+
 ```csharp
 
+```
 
 ### Testen des Systems
 

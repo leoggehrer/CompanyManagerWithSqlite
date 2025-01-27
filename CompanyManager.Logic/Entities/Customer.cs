@@ -44,7 +44,7 @@ namespace CompanyManager.Logic.Entities
         /// Copies properties from another customer.
         /// </summary>
         /// <param name="customer">The customer to copy properties from.</param>
-        public void CopyProperties(ICustomer customer)
+        public virtual void CopyProperties(ICustomer customer)
         {
             base.CopyProperties(customer);
 

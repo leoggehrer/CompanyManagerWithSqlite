@@ -48,7 +48,7 @@ namespace CompanyManager.Logic.Entities
         /// Copies the properties from another company instance.
         /// </summary>
         /// <param name="company">The company instance to copy properties from.</param>
-        public void CopyProperties(ICompany company)
+        public virtual void CopyProperties(ICompany company)
         {
             base.CopyProperties(company);
 
