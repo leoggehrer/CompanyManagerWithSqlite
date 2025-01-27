@@ -1,53 +1,139 @@
-# CompanyManager
-
-------
+# CompanyManager With SQLITE
 
 **Lernziele**
 
-- Diese Vorlage dient als Ausgangspunkt f�r verschiedenste Demos im Unterricht.
+- Wie mit dem **CodeFirst** Ansatz eine Datenbank erstellt wird.
+- Die Verknüpfung von Datenstrukturen und Datenbanken verstehen.
+- Wie **SQLite** als Datenbank mit dem EntityFramework verwendet wird.
+- Wie **Constraints** in einer Datenbank definiert werden.
 
-## CompanyManager
+**Hinweis:** Als Startpunkt wird die Vorlage [CompanyManager](https://github.com/leoggehrer/CompanyManager-Template) verwendet.
 
-Das Projekt **'CompanyManager'** ist ein kleines datenzentriertes Anwendungsbeispiel mit welchem die Erstellung eines Software-Systems dargestellt werden soll. Aufgrund der Komplexit�t, die ein Software-System im Allgemeinem darstellt, ist die Erstellung des Beispiels in mehreren Themenbereichen unterteilt. Jedes Thema beginnt mit dieser Vorlage und wird entsprechend der jeweiligen Aufgabenstellung erweitert. 
+## Beschreibung der Vorlage
 
-### Vorlage
+Den Aufbau und die Beschreibung der Vorlage finden Sie [hier](https://github.com/leoggehrer/CompanyManager-Template).
 
-In dieser Vorlage gibt es bereits zwei unterschliedliche Projekte:
+## Vorbereitung
 
-|Name|Beschreibung|
-|---|---|
-|CompanyManager.ConApp| Eine Konsolen-Anwendung zum Starten der Anwendung und Ausf�hrung des Programm-Men�s. Die entsprechenden Men�-Funktionen m�ssen implementiert werden und sind mit *throw new NotImplementedException()* markiert. |
-|CompanyManager.Logic| In diesem Projekt sind alle Schnittstellen und der Datenzugriff definiert. |
-|CompanyManager.Logic.Contracts| In diesem Abschnitt befinden sich alle Schnittstellen. |
-|CompanyManager.Logic.DataContext| In diesem Abschnitt befindet sich der Data-Kontext (`CompanyManagerContext`). |
+Bevor mit der Umsetzung begonnen wird, sollte die Vorlage heruntergeladen und die Funktionalität verstanden werden.
 
-### Datenstruktur
+### Packages installieren
 
-Die Datenstruktur vom 'CompanyManager' ist einfach und besteht im wesentlichen aus 3 Komponenten welche in der folgenden Tabelle zusammengefasst sind:
+Um mit dem EntityFramework zu arbeiten, müssen die folgenden Packages installiert werden:
 
-|Komponente|Beschreibung|Gr�sse|Mussfeld|Eindeutig|
-|---|---|---|---|---|
-|**Company**|||||
-|*Name*|Name und der Firma|256|Ja|Ja|
-|*Address*|Adresse der Firma|1024|Nein|Nein|
-|**Customer**|||||
-|*CompanyId*|Fremdsch�ssel zur Firma|int|Ja|Nein|
-|*Name*|Name des Kunden|256|Ja|Ja|
-|*Email*|Email des Kunden|128|Ja|Ja|
-|**Employee**|||||
-|*CompanyId*|Fremdsch�ssel zur Firma|int|Ja|Nein|
-|*FirstName*|Vorname des Mitarbeiters|64|Nein|Nein|
-|*LastName*|Nachname des Mitarbeiters|64|Nein|Nein|
-|*Email*|Email des Kunden|128|Ja|Ja|
-|**Hinweis**|Alle Komponenten haben eine eindeutige Identit�t (Id)||||
-|*|*Nat�rlich k�nnen noch weitere Attribute hinzugef�gt werden.*||||
+- CompanyManager.Logic
+  - Microsoft.EntityFrameworkCore
+  - Microsoft.EntityFrameworkCore.Sqlite
+- CompanyManger.ConApp
+  - Microsoft.EntityFrameworkCore.Design
 
-Aus dieser Definition kann ein entsprechendes Objektmodell abgeleitet werden, welches nachfolgend skizziert ist:
+Abhängig von der IDE kann dies über die Konsole oder über die GUI erfolgen. Sie finden eine Anleitung zum Installieren von Nuget-Packages [hier](https://github.com/leoggehrer/Slides/tree/main/NutgetInstall).
 
-|Komponente|Relation|Komponente|
-|---|---|---|
-|**Company**|1:n|Customer|
-|**Company**|1:n|Employee|
+### Erstellen der Entitäten
+
+1. Erstellen des Ordners **Entities** im Logik-Projekt.
+2. In diesem Ordner werden die **Entitäten** definiert:
+3. Erstellen der Entities **Company**, **Customer** und **Employee**.
+4. Diese Entitäten müssen die Schnittstellen im Ordner **Contracts** implementieren. Nachfolgend ein Beispiel für die **Company**-Entität:
+
+```csharp
+/// <summary>
+/// Represents a company entity.
+/// </summary>
+public class Company : EntityObject, ICompany
+{
+    #region properties
+    /// <summary>
+    /// Gets or sets the name of the company.
+    /// </summary>
+    public string Name { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the address of the company.
+    /// </summary>
+    public string? Address { get; set; }
+
+    /// <summary>
+    /// Gets or sets the description of the company.
+    /// </summary>
+    public string? Description { get; set; }
+    #endregion properties
+
+    #region methods
+    /// <summary>
+    /// Copies the properties from another company instance.
+    /// </summary>
+    /// <param name="company">The company instance to copy properties from.</param>
+    public void CopyProperties(ICompany company)
+    {
+        base.CopyProperties(company);
+
+        Name = company.Name;
+        Address = company.Address;
+        Description = company.Description;
+    }
+
+    /// <summary>
+    /// Returns a string representation of the company.
+    /// </summary>
+    /// <returns>A string that represents the company.</returns>
+    public override string ToString()
+    {
+        return $"Company: {Name}";
+    }
+    #endregion methods
+}
+```
+
+Diese Implementierung kann analog für die anderen Entitäten erfolgen.
+
+5. Fügen Sie zusätzlich zu den Entitäten die **Navigationseigenschaften** hinzu. Nachfolgend ein Beispiel für die **Company**-Entität:
+
+```csharp
+/// <summary>
+/// Represents a company entity.
+/// </summary>
+public class Company : EntityObject, ICompany
+{
+    ...
+
+    #region navigation properties
+    /// <summary>
+    /// Gets or sets the list of customers associated with the company.
+    /// </summary>
+    public List<Customer> Customers { get; set; } = [];
+    /// <summary>
+    /// Gets or sets the list of employees associated with the company.
+    /// </summary>
+    public List<Employee> Employees { get; set; } = [];
+    #endregion navigation properties
+
+    ...
+}
+```
+
+Die Navigationseigenschaften müssen in allen Entitäten definiert werden und die entsprechenden Entitäten referenzieren. Alle Informationen zu Navigationseigenschaften finden Sie in der folgenden Tabelle:
+ 
+| Komponente        | Relation | Komponente |
+| ----------------- | -------- | ---------- |
+| **Company**       | 1:n      | Customer   |
+| **Company**       | 1:n      | Employee   |
+| **Customer**      | 1:0..1   | Company    |
+| **Employee**      | 1:0..1   | Company    |
+
+Das vollständige Entity-objektmodell ist in der nachfolgenden Abbildung abgebildet:
+
+![Entity-Objektmodell](img/entities.png) 
+
+ 6. **Attribute** den Entitäten hinzufügen
+
+Attribute bei Entitäten sind essenziell, um die spezifischen Eigenschaften oder Merkmale der Entitäten in einem Datenmodell zu beschreiben. Sie liefern zusätzliche Informationen, die notwendig sind, um die Entitäten eindeutig zu identifizieren, ihre Eigenschaften zu speichern und ihre Beziehungen zu anderen Entitäten zu definieren. Weitere Informationen zu Attributen finden Sie [hier](https://www.learnentityframeworkcore.com/configuration/data-annotation-attributes).
+
+
+
+Nachfolgend ein Beispiel für die **Company**-Entität:
+```csharp
+
 
 ### Testen des Systems
 
@@ -60,9 +146,7 @@ Aus dieser Definition kann ein entsprechendes Objektmodell abgeleitet werden, we
 ## Abgabe
 
 - Termin: 1 Woche nach der Ausgabe
-
 - Klasse:
-
 - Name:
 
 ## Quellen
