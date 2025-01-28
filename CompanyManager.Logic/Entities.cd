@@ -16,6 +16,7 @@
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
       <Property Name="Customers" />
+      <Property Name="Employees" />
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" />
   </Class>

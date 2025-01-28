@@ -1,5 +1,6 @@
 ﻿using CompanyManager.Logic.Contracts;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CompanyManager.Logic.Entities
 {

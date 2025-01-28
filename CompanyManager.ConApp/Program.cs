@@ -11,7 +11,7 @@ namespace CompanyManager.ConApp
         static void Main(/*string[] args*/)
         {
             string input = string.Empty;
-            Logic.Contracts.IContext context = Logic.DataContext.Factory.CreateContext();
+            using Logic.Contracts.IContext context = Logic.DataContext.Factory.CreateContext();
 
             while (!input.Equals("x", StringComparison.CurrentCultureIgnoreCase))
             {
@@ -96,7 +96,7 @@ namespace CompanyManager.ConApp
                 Console.WriteLine($"{company}");
                 foreach (var customer in company.Customers)
                 {
-                    Console.WriteLine($"{customer}");
+                    Console.WriteLine($"\t{customer}");
                 }
             }
         }
@@ -216,9 +216,9 @@ namespace CompanyManager.ConApp
 
             try
             {
-                foreach (var cust in context.CustomerSet.AsQueryable().Where(query).Include(e => e.Company))
+                foreach (var customer in context.CustomerSet.AsQueryable().Where(query).Include(e => e.Company))
                 {
-                    Console.WriteLine($"{cust} - {cust.Company?.Name}");
+                    Console.WriteLine($"{customer} - {customer.Company?.Name}");
                 }
             }
             catch (Exception ex)

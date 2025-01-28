@@ -1,4 +1,5 @@
 ﻿using CompanyManager.Logic.Contracts;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CompanyManager.Logic.Entities
 {

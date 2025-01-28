@@ -25,13 +25,13 @@ Um mit dem EntityFramework zu arbeiten, müssen die folgenden Packages installie
   - Microsoft.EntityFrameworkCore*
   - Microsoft.EntityFrameworkCore.Sqlite**
 - CompanyManger.ConApp
-  - Microsoft.EntityFrameworkCore.Design***
+  - Microsoft.EntityFrameworkCore.Tools***
 
 Abhängig von der IDE kann dies über die Konsole oder über die GUI erfolgen. Sie finden eine Anleitung zum Installieren von Nuget-Packages [hier](https://github.com/leoggehrer/Slides/tree/main/NutgetInstall).
 
 *...Das ist die Basis-Bibliothek für den EntityFramework und muss immer inkludiert werden.
 **...Erweiterung zur Basis-Bibliothek für die Verwendung von SQLite.
-***...Diese Package ist für dei Erstellung und Aktuallisierung der Datenbank erforderlich.
+***...Diese Package ist für die Erstellung und Aktuallisierung der Datenbank erforderlich.
 
 ### Erstellen der Entitäten
 
