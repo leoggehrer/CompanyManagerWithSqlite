@@ -1,14 +1,12 @@
 ﻿using CompanyManager.Logic.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CompanyManager.Logic.Entities
 {
     /// <summary>
     /// Represents a company entity.
     /// </summary>
-    [Table("Companies")]
+    [System.ComponentModel.DataAnnotations.Schema.Table("Companies")]
     [Index(nameof(Name), IsUnique = true)]
     public class Company : EntityObject, ICompany
     {
@@ -16,19 +14,20 @@ namespace CompanyManager.Logic.Entities
         /// <summary>
         /// Gets or sets the name of the company.
         /// </summary>
-        [MaxLength(256)]
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.MaxLength(256)]
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the address of the company.
         /// </summary>
-        [MaxLength(1024)]
+        [System.ComponentModel.DataAnnotations.MaxLength(1024)]
         public string? Address { get; set; }
 
         /// <summary>
         /// Gets or sets the description of the company.
         /// </summary>
-        [MaxLength(2048)]
+        [System.ComponentModel.DataAnnotations.MaxLength(2048)]
         public string? Description { get; set; }
         #endregion properties
 

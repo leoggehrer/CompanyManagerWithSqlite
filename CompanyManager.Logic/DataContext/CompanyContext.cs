@@ -11,6 +11,7 @@ namespace CompanyManager.Logic.DataContext
 
         public DbSet<Entities.Company> CompanySet { get; set; }
         public DbSet<Entities.Customer> CustomerSet { get; set; }
+        public DbSet<Entities.Employee> EmployeeSet { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

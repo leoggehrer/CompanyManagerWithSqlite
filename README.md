@@ -111,7 +111,6 @@ Fügen Sie zusätzlich zu den Entitäten die **Navigationseigenschaften** hinzu.
 public class Company : EntityObject, ICompany
 {
     ...
-
     #region navigation properties
     /// <summary>
     /// Gets or sets the list of customers associated with the company.
@@ -122,7 +121,6 @@ public class Company : EntityObject, ICompany
     /// </summary>
     public List<Employee> Employees { get; set; } = [];
     #endregion navigation properties
-
     ...
 }
 ```
@@ -157,7 +155,6 @@ Die Schlüsseleigenschaft der Entität ist in der Klasse `EntityObject` definier
       /// </summary>
       [System.ComponentModel.DataAnnotations.Key]
       public int Id { get; set; }
-
       ...
   }
 ```
@@ -167,16 +164,159 @@ Die Schlüsseleigenschaft der Entität ist in der Klasse `EntityObject` definier
 Nachfolgend ein Beispiel für die **Company**-Entität:
 
 ```csharp
+/// <summary>
+/// Represents a company entity.
+/// </summary>
+[System.ComponentModel.DataAnnotations.Schema.Table("Companies")]
+[Index(nameof(Name), IsUnique = true)]
+public class Company : EntityObject, ICompany
+{
+    #region properties
+    /// <summary>
+    /// Gets or sets the name of the company.
+    /// </summary>
+    [System.ComponentModel.DataAnnotations.Required]
+    [System.ComponentModel.DataAnnotations.MaxLength(256)]
+    public string Name { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets or sets the address of the company.
+    /// </summary>
+    [System.ComponentModel.DataAnnotations.MaxLength(1024)]
+    public string? Address { get; set; }
+
+    /// <summary>
+    /// Gets or sets the description of the company.
+    /// </summary>
+    [System.ComponentModel.DataAnnotations.MaxLength(2048)]
+    public string? Description { get; set; }
+    #endregion properties
+
+    #region navigation properties
+    /// <summary>
+    /// Gets or sets the list of customers associated with the company.
+    /// </summary>
+    public List<Customer> Customers { get; set; } = [];
+    /// <summary>
+    /// Gets or sets the list of employees associated with the company.
+    /// </summary>
+    public List<Employee> Employees { get; set; } = [];
+    #endregion navigation properties
+
+    #region methods
+    /// <summary>
+    /// Copies the properties from another company instance.
+    /// </summary>
+    /// <param name="company">The company instance to copy properties from.</param>
+    public virtual void CopyProperties(ICompany company)
+    {
+        base.CopyProperties(company);
+
+        Name = company.Name;
+        Address = company.Address;
+        Description = company.Description;
+    }
+
+    /// <summary>
+    /// Returns a string representation of the company.
+    /// </summary>
+    /// <returns>A string that represents the company.</returns>
+    public override string ToString()
+    {
+        return $"Company: {Name}";
+    }
+    #endregion methods
+}
+```
+
+| Attribut | Beschreibung |
+|----------|--------------|
+| **Table** | Mit dem Table-Attribut kann der Name der Tabelle in der Datenbank definiert werden. Wenn das Attribut nicht gesetzt wird, wird der Name der Tabelle automatisch aus dem Klassennamen abgeleitet. Der Parameter `IsUnique = true` gibt an, dass die Werte eindeutig sein müssen. |
+| **Index** | Das Attribut gibt an, dass die Eigenschaft ein Index ist. Mit dem Attribut kann ein Index auf einer oder mehreren Eigenschaften definiert werden. |
+| **Required** | Das Attribut gibt an, dass die Eigenschaft einen Wert haben muss. |
+| **MaxLength** | Das Attribut gibt die maximale Länge der Eigenschaft an. |
+
+Fügen Sie die Attribute zu den anderen Entitäten hinzu. Die Informationen über Längen usw. finden Sie in der Beschreibung der Vorlage.
+
+### Erstellen des DataContext
+
+Der **DbContext** ist die Hauptklasse, die mit der Datenbank kommuniziert. Es ist eine Kombination aus Unit of Work und Repository-Mustern. Es kann als eine Sammlung von Entitäten betrachtet werden, die in einer Datenbank gespeichert sind. Der **DbContext** ist verantwortlich für das Abrufen, Speichern, Aktualisieren und Löschen von Entitäten aus der Datenbank.
+
+Erweitern Sie die vorhandene Schnittstelle `IContext` um folgende Eigenschaften:
+
+```csharp
+public interface IContext : IDisposable
+{
+    DbSet<Entities.Company> CompanySet { get; }
+    DbSet<Entities.Customer> CustomerSet { get; }
+    DbSet<Entities.Employee> EmployeeSet { get; }
+
+    int SaveChanges();
+}
+```
+
+Im nächsten Schritt wird die Kontext-Klasse erstellt. Wir nennen die Klasse `CompanyContext` und erweitern sie um die Klasse `DbContext` aus dem Namespace `Microsoft.EntityFrameworkCore`.
+
+```csharp
+internal class CompanyContext : DbContext, IContext
+{
+    #region fields
+    private static string ConnectionString = "data source=CompanyManager.db";
+    #endregion fields
+
+    public DbSet<Entities.Company> CompanySet { get; set; }
+    public DbSet<Entities.Customer> CustomerSet { get; set; }
+    public DbSet<Entities.Employee> EmployeeSet { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlite(ConnectionString);
+
+        base.OnConfiguring(optionsBuilder);
+    }
+}
+```
+
+Überschreiben Sie in der Klasse `CompanyContext` die Methode `OnConfiguring`, um die Verbindung zur Datenbank herzustellen. In diesem Fall wird die Datenbank **SQLite** verwendet. Die Verbindungsinformationen werden in der statischen Variable `ConnectionString` gespeichert.
+
+### Erstellen der Datenbank
+
+Das Erstellen der Datenbank erfolgt über den **CodeFirst**-Ansatz. Dies bedeutet, dass die Datenbank aus den Entitäten erstellt wird. Der **DbContext** ist für das Erstellen und Aktualisieren der Datenbank verantwortlich. Die einzelnen Schritte sind von der verwendeten IDE abhängig. Eine Anleitung zum Erstellen der Datenbank finden Sie [hier](https://github.com/leoggehrer/Slides/tree/main/EFCreateDatabase).
+
+### Erstellen der Factory-Klassen
+
+Für den Zugriff auf den Database-Kontext wird eine Factory-Klasse benötigt. Erstellen Sie die Klasse `Factory` im Ordner *DataContext*.
+
+```csharp
+/// <summary>
+/// Factory class to create instances of IMusicStoreContext.
+/// </summary>
+public static class Factory
+{
+    /// <summary>
+    /// Creates an instance of IContext.
+    /// </summary>
+    /// <returns>An instance of IContext.</returns>
+    public static IContext CreateContext()
+    {
+        var result = new CompanyContext();
+
+        result.Database.EnsureCreated();
+
+        return result;
+    }
+}
 ```
 
 ### Testen des Systems
 
-- keine Angaben
+Im Konsolen Programm ist bereits ein Menü zum Testen der Funktionalität implementiert. Erweitern Sie das Menü um die Funktionalitäten für die Entitäten **Company**,  **Customer** und **Employee**.
+
+Fügen Sie das Package `System.Linq.Dynamic.Core` hinzu, um Zeichenfolgen (strings) in  LINQ-Abfragen zu verwenden. Das Hinzufügen des Packages erfolgt im Konsole-Programm und die Anleitung dazu finden Sie [hier](https://github.com/leoggehrer/Slides/tree/main/NutgetInstall).
 
 ## Hilfsmitteln
 
-- keine Angaben
+- Foliensätze
 
 ## Abgabe
 

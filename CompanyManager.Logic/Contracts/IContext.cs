@@ -6,6 +6,7 @@ namespace CompanyManager.Logic.Contracts
     {
         DbSet<Entities.Company> CompanySet { get; }
         DbSet<Entities.Customer> CustomerSet { get; }
+        DbSet<Entities.Employee> EmployeeSet { get; }
 
         int SaveChanges();
     }
