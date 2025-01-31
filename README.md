@@ -136,7 +136,7 @@ Die Navigationseigenschaften müssen in allen Entitäten definiert werden und di
 
 Das vollständige *Entity-objektmodell* ist in der nachfolgenden Abbildung abgebildet:
 
-![Entity-Objektmodell](img/entities.png)
+![Entity-Objektmodell](img/Entities.png)
 
 #### Attribute den Entitäten hinzufügen
 
