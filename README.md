@@ -138,7 +138,7 @@ Das vollständige *Entity-objektmodell* ist in der nachfolgenden Abbildung abgeb
 
 ![Entity-Objektmodell](img/entities.png)
 
-#### **Attribute** den Entitäten hinzufügen
+#### Attribute den Entitäten hinzufügen
 
 Attribute bei Entitäten sind essenziell, um die spezifischen Eigenschaften oder Merkmale der Entitäten in einem Datenmodell zu beschreiben. Sie liefern zusätzliche Informationen, die notwendig sind, um die Entitäten eindeutig zu identifizieren, ihre Eigenschaften zu speichern und ihre Beziehungen zu anderen Entitäten zu definieren. Weitere Informationen zu Attributen finden Sie [hier](https://www.learnentityframeworkcore.com/configuration/data-annotation-attributes).
 
