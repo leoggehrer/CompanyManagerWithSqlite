@@ -312,7 +312,7 @@ public static class Factory
 
 Im Konsolen Programm ist bereits ein Menü zum Testen der Funktionalität implementiert. Erweitern Sie das Menü um die Funktionalitäten für die Entitäten **Company**,  **Customer** und **Employee**.
 
-Fügen Sie das Package `System.Linq.Dynamic.Core` hinzu, um Zeichenfolgen (strings) in  LINQ-Abfragen zu verwenden. Das Hinzufügen des Packages erfolgt im Konsole-Programm und die Anleitung dazu finden Sie [hier](https://github.com/leoggehrer/Slides/tree/main/NutgetInstall).
+Fügen Sie das Package `System.Linq.Dynamic.Core` hinzu, um Zeichenfolgen (strings) in LINQ-Abfragen zu verwenden. Das Hinzufügen des Packages erfolgt im Konsole-Programm und die Anleitung dazu finden Sie [hier](https://github.com/leoggehrer/Slides/tree/main/NutgetInstall).
 
 ## Hilfsmitteln
 
