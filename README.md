@@ -5,7 +5,7 @@
 - Wie mit dem **CodeFirst** Ansatz eine Datenbank erstellt wird.
 - Die Verknüpfung von Datenstrukturen und Datenbanken verstehen.
 - Wie **SQLite** als Datenbank mit dem EntityFramework verwendet wird.
-- Wie **Einschränkungen** (Contrains) in einer Datenbank definiert werden.
+- Wie **Einschränkungen** (Constrains) in einer Datenbank definiert werden.
 
 **Hinweis:** Als Startpunkt wird die Vorlage [CompanyManager](https://github.com/leoggehrer/CompanyManager-Template) verwendet.
 
@@ -21,17 +21,17 @@ Bevor mit der Umsetzung begonnen wird, sollte die Vorlage heruntergeladen und di
 
 Um mit dem EntityFramework zu arbeiten, müssen die folgenden Packages installiert werden:
 
-- CompanyManager.Logic
+- **CompanyManager.Logic**
   - Microsoft.EntityFrameworkCore*
   - Microsoft.EntityFrameworkCore.Sqlite**
-- CompanyManger.ConApp
+- **CompanyManger.ConApp**
   - Microsoft.EntityFrameworkCore.Tools***
 
 Abhängig von der IDE kann dies über die Konsole oder über die GUI erfolgen. Sie finden eine Anleitung zum Installieren von Nuget-Packages [hier](https://github.com/leoggehrer/Slides/tree/main/NutgetInstall).
 
 *...Das ist die Basis-Bibliothek für den EntityFramework und muss immer inkludiert werden.
 **...Erweiterung zur Basis-Bibliothek für die Verwendung von SQLite.
-***...Diese Package ist für die Erstellung und Aktuallisierung der Datenbank erforderlich.
+***...Diese Package ist für die Erstellung und Aktualisierung der Datenbank erforderlich.
 
 ### Erstellen der Entitäten
 
@@ -131,8 +131,8 @@ Die Navigationseigenschaften müssen in allen Entitäten definiert werden und di
 | ----------------- | -------- | ---------- |
 | **Company**       | 1:n      | Customer   |
 | **Company**       | 1:n      | Employee   |
-| **Customer**      | 1:0..1   | Company    |
-| **Employee**      | 1:0..1   | Company    |
+| **Customer**      | 1:1      | Company    |
+| **Employee**      | 1:1      | Company    |
 
 Das vollständige *Entity-objektmodell* ist in der nachfolgenden Abbildung abgebildet:
 
@@ -159,7 +159,7 @@ Die Schlüsseleigenschaft der Entität ist in der Klasse `EntityObject` definier
   }
 ```
 
-**Erläuterung:** Das Setzen des Attributes `Key` kann entfallen. Die Default-Bennung der Identät ist `Id` oder der Klassenname gefolgt von `Id` (EntityObjectId).
+**Erläuterung:** Das Setzen des Attributs `Key` kann entfallen. Die Default-Bennung der Identät ist `Id` oder der Klassenname gefolgt von `Id` (EntityObjectId).
 
 Nachfolgend ein Beispiel für die **Company**-Entität:
 
@@ -310,11 +310,15 @@ public static class Factory
 
 ### Testen des Systems
 
-Im Konsolen Programm ist bereits ein Menü zum Testen der Funktionalität implementiert. Erweitern Sie das Menü um die Funktionalitäten für die Entitäten **Company**,  **Customer** und **Employee**.
+Das Konsolenprogramm enthält ein Testmenü zum Testen der Funktionalität für die Entitäten **Company**, **Customer** und **Employee**. Implementieren Sie die Methoden welche noch nicht fertig gestellt sind. Sie erkennen die unvollständigen Methoden mit dem Inhalt:
+
+```csharp
+    throw new NotImplementedException();
+```
 
 Fügen Sie das Package `System.Linq.Dynamic.Core` hinzu, um Zeichenfolgen (strings) in LINQ-Abfragen zu verwenden. Das Hinzufügen des Packages erfolgt im Konsole-Programm und die Anleitung dazu finden Sie [hier](https://github.com/leoggehrer/Slides/tree/main/NutgetInstall).
 
-## Hilfsmitteln
+## Hilfsmittel
 
 - Foliensätze
 
