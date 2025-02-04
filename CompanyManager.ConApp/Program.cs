@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Linq.Dynamic.Core;
 
 namespace CompanyManager.ConApp
@@ -21,7 +20,7 @@ namespace CompanyManager.ConApp
                 Console.WriteLine("CompanyManager");
                 Console.WriteLine("==========================================");
 
-                Console.WriteLine($"{nameof(Logic.DataContext.Factory.InitDatabase),-25}....{index++}");
+                Console.WriteLine($"{nameof(InitDatabase),-25}....{index++}");
 
                 Console.WriteLine($"{nameof(PrintCompanyies),-25}....{index++}");
                 Console.WriteLine($"{nameof(QueryCompanies),-25}....{index++}");
