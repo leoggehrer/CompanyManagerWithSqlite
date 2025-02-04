@@ -58,7 +58,7 @@ namespace CompanyManager.Logic.Entities
         /// <returns>A string representation of the employee.</returns>
         public override string ToString()
         {
-            return $"{FirstName} {LastName}";
+            return $"Employee: {FirstName} {LastName} - {Email}";
         }
         #endregion methods
     }

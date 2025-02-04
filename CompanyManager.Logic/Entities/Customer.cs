@@ -59,7 +59,7 @@ namespace CompanyManager.Logic.Entities
         /// <returns>A string representation of the customer.</returns>
         public override string ToString()
         {
-            return $"Customer: {Name}";
+            return $"Customer: {Name} - {Email}";
         }
         #endregion methods
     }
