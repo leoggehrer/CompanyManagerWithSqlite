@@ -26,6 +26,27 @@ namespace CompanyManager.Logic.DataContext
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
         }
+
+        public static void InitDatabase()
+        {
+            var path = "Data";
+            var context = CreateContext();
+
+            CreateDatabase();
+
+            var companies = DataLoader.LoadCompaniesFromCsv(Path.Combine(path, "companies.csv"));
+
+            companies.ToList().ForEach(e => context.CompanySet.Add(e));
+            context.SaveChanges();
+
+            var customers = DataLoader.LoadCustomersFromCsv(Path.Combine(path, "customers.csv"));
+            customers.ToList().ForEach(e => context.CustomerSet.Add(e));
+
+            var employees = DataLoader.LoadEmployeesFromCsv(Path.Combine(path, "employees.csv"));
+            employees.ToList().ForEach(e => context.EmployeeSet.Add(e));
+
+            context.SaveChanges();
 #endif
+        }
     }
 }

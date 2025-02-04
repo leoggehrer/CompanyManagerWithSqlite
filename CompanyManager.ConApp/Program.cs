@@ -21,7 +21,7 @@ namespace CompanyManager.ConApp
                 Console.WriteLine("CompanyManager");
                 Console.WriteLine("==========================================");
 
-                Console.WriteLine($"{nameof(InitDatabase),-25}....{index++}");
+                Console.WriteLine($"{nameof(Logic.DataContext.Factory.InitDatabase),-25}....{index++}");
 
                 Console.WriteLine($"{nameof(PrintCompanyies),-25}....{index++}");
                 Console.WriteLine($"{nameof(QueryCompanies),-25}....{index++}");
@@ -49,7 +49,8 @@ namespace CompanyManager.ConApp
                     switch (choice)
                     {
                         case 1:
-                            InitDatabase(context);
+                            InitDatabase();
+                            Logic.DataContext.Factory.InitDatabase();
                             Console.WriteLine();
                             Console.Write("Continue with Enter...");
                             Console.ReadLine();
@@ -118,28 +119,12 @@ namespace CompanyManager.ConApp
             }
         }
 
-        private static void InitDatabase(Logic.Contracts.IContext context)
+        public static void InitDatabase()
         {
 #if DEBUG
-            var path = "Data";
-
-            Logic.DataContext.Factory.CreateDatabase();
-
-            var companies = Logic.DataContext.DataLoader.LoadCompaniesFromCsv(Path.Combine(path, "companies.csv"));
-
-            companies.ToList().ForEach(e => context.CompanySet.Add(e));
-            context.SaveChanges();
-
-            var customers = Logic.DataContext.DataLoader.LoadCustomersFromCsv(Path.Combine(path, "customers.csv"));
-            customers.ToList().ForEach(e => context.CustomerSet.Add(e));
-
-            var employees = Logic.DataContext.DataLoader.LoadEmployeesFromCsv(Path.Combine(path, "employees.csv"));
-            employees.ToList().ForEach(e => context.EmployeeSet.Add(e));
-
-            context.SaveChanges();
+            Logic.DataContext.Factory.InitDatabase();
 #endif
         }
-
         /// <summary>
         /// Prints all companies in the context.
         /// </summary>
