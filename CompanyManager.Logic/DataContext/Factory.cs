@@ -19,6 +19,9 @@ namespace CompanyManager.Logic.DataContext
         }
 
 #if DEBUG
+        /// <summary>
+        /// Creates the database for the CompanyContext.
+        /// </summary>
         public static void CreateDatabase()
         {
             var context = new CompanyContext();
