@@ -5,7 +5,7 @@
 - Wie mit dem **CodeFirst** Ansatz eine Datenbank erstellt wird.
 - Die Verknüpfung von Datenstrukturen und Datenbanken verstehen.
 - Wie **SQLite** als Datenbank mit dem EntityFramework verwendet wird.
-- Wie **Einschränkungen** (Constrains) in einer Datenbank definiert werden.
+- Wie **Einschränkungen** (Constraints) in einer Datenbank definiert werden.
 
 **Hinweis:** Als Startpunkt wird die Vorlage [CompanyManager](https://github.com/leoggehrer/CompanyManager-Template) verwendet.
 
@@ -27,7 +27,7 @@ Um mit dem EntityFramework zu arbeiten, müssen die folgenden Packages installie
 - **CompanyManger.ConApp**
   - Microsoft.EntityFrameworkCore.Tools***
 
-Abhängig von der IDE kann dies über die Konsole oder über die GUI erfolgen. Sie finden eine Anleitung zum Installieren von Nuget-Packages [hier](https://github.com/leoggehrer/Slides/tree/main/NutgetInstall).
+Abhängig von der IDE kann dies über die Konsole oder über die GUI erfolgen. Sie finden eine Anleitung zum Installieren von Nuget-Packages [hier](https://github.com/leoggehrer/Slides/tree/main/NugetInstall).
 
 *...Das ist die Basis-Bibliothek für den EntityFramework und muss immer inkludiert werden.
 **...Erweiterung zur Basis-Bibliothek für die Verwendung von SQLite.
@@ -134,7 +134,7 @@ Die Navigationseigenschaften müssen in allen Entitäten definiert werden und di
 | **Customer**      | 1:1      | Company    |
 | **Employee**      | 1:1      | Company    |
 
-Das vollständige *Entity-objektmodell* ist in der nachfolgenden Abbildung abgebildet:
+Das vollständige *Entity-Objectmodell* ist in der nachfolgenden Abbildung abgebildet:
 
 ![Entity-Objektmodell](img/Entities.png)
 
@@ -142,7 +142,7 @@ Das vollständige *Entity-objektmodell* ist in der nachfolgenden Abbildung abgeb
 
 Attribute bei Entitäten sind essenziell, um die spezifischen Eigenschaften oder Merkmale der Entitäten in einem Datenmodell zu beschreiben. Sie liefern zusätzliche Informationen, die notwendig sind, um die Entitäten eindeutig zu identifizieren, ihre Eigenschaften zu speichern und ihre Beziehungen zu anderen Entitäten zu definieren. Weitere Informationen zu Attributen finden Sie [hier](https://www.learnentityframeworkcore.com/configuration/data-annotation-attributes).
 
-Die Schlüsseleigenschaft der Entität ist in der Klasse `EntityObject` definiert und kann daher mit dem Atribute `Key` ergänzt werden.
+Die Schlüsseleigenschaft der Entität ist in der Klasse `EntityObject` definiert und kann daher mit dem Attribute `Key` ergänzt werden.
 
 ```csharp
   /// <summary>
@@ -159,7 +159,7 @@ Die Schlüsseleigenschaft der Entität ist in der Klasse `EntityObject` definier
   }
 ```
 
-**Erläuterung:** Das Setzen des Attributs `Key` kann entfallen. Die Default-Bennung der Identät ist `Id` oder der Klassenname gefolgt von `Id` (EntityObjectId).
+**Erläuterung:** Das Setzen des Attributs `Key` kann entfallen. Die Default-Benennung der Identität ist `Id` oder der Klassenname gefolgt von `Id` (EntityObjectId).
 
 Nachfolgend ein Beispiel für die **Company**-Entität:
 
@@ -316,7 +316,7 @@ Das Konsolenprogramm enthält ein Testmenü zum Testen der Funktionalität für 
     throw new NotImplementedException();
 ```
 
-Fügen Sie das Package `System.Linq.Dynamic.Core` hinzu, um Zeichenfolgen (strings) in LINQ-Abfragen zu verwenden. Das Hinzufügen des Packages erfolgt im Konsole-Programm und die Anleitung dazu finden Sie [hier](https://github.com/leoggehrer/Slides/tree/main/NutgetInstall).
+Fügen Sie das Package `System.Linq.Dynamic.Core` hinzu, um Zeichenfolgen (strings) in LINQ-Abfragen zu verwenden. Das Hinzufügen des Packages erfolgt im Konsolen-Programm und die Anleitung dazu finden Sie [hier](https://github.com/leoggehrer/Slides/tree/main/NugetInstall).
 
 ## Hilfsmittel
 
