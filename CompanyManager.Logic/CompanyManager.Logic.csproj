@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CompanyManager.Common\CompanyManager.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Data\companies.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

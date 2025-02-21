@@ -1,12 +1,17 @@
-﻿using CompanyManager.Logic.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Linq;
 
 namespace CompanyManager.Logic.Entities
 {
     /// <summary>
     /// Represents an employee entity.
     /// </summary>
-    public class Employee : EntityObject, IEmployee
+    [Table("Employees")]
+    [Index(nameof(FirstName), nameof(LastName), IsUnique = false)]
+    [Index(nameof(Email), IsUnique = true)]
+    public class Employee : EntityObject, Common.Contracts.IEmployee
     {
         #region properties
         /// <summary>
@@ -17,16 +22,19 @@ namespace CompanyManager.Logic.Entities
         /// <summary>
         /// Gets or sets the first name of the employee.
         /// </summary>
+        [MaxLength(64)]
         public string FirstName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the last name of the employee.
         /// </summary>
+        [MaxLength(64)]
         public string LastName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the email of the employee.
         /// </summary>
+        [MaxLength(128)]
         public string Email { get; set; } = string.Empty;
         #endregion properties
 
@@ -38,20 +46,6 @@ namespace CompanyManager.Logic.Entities
         #endregion navigation properties
 
         #region methods
-        /// <summary>
-        /// Copies properties from another employee.
-        /// </summary>
-        /// <param name="employee">The employee to copy properties from.</param>
-        public virtual void CopyProperties(IEmployee employee)
-        {
-            base.CopyProperties(employee);
-
-            CompanyId = employee.CompanyId;
-            FirstName = employee.FirstName;
-            LastName = employee.LastName;
-            Email = employee.Email;
-        }
-
         /// <summary>
         /// Returns a string representation of the employee.
         /// </summary>

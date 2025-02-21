@@ -1,11 +1,9 @@
-﻿using CompanyManager.Logic.Contracts;
-
-namespace CompanyManager.Logic.Entities
+﻿namespace CompanyManager.Logic.Entities
 {
     /// <summary>
     /// Represents an abstract base class for entities with an identifier.
     /// </summary>
-    public abstract class EntityObject : IIdentifiable
+    public abstract class EntityObject : Common.Contracts.IIdentifiable
     {
         /// <summary>
         /// Gets or sets the identifier of the entity.
@@ -18,7 +16,7 @@ namespace CompanyManager.Logic.Entities
         /// </summary>
         /// <param name="other">The other identifiable entity to copy properties from.</param>
         /// <exception cref="ArgumentNullException">Thrown when the other entity is null.</exception>
-        public virtual void CopyProperties(IIdentifiable other)
+        public virtual void CopyProperties(Common.Contracts.IIdentifiable other)
         {
             if (other == null) throw new ArgumentNullException(nameof(other));
 
