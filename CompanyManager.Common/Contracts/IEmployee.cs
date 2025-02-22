@@ -1,4 +1,4 @@
-﻿//@BaseCode
+﻿//@CodeCopy
 namespace CompanyManager.Common.Contracts
 {
     /// <summary>
@@ -32,6 +32,8 @@ namespace CompanyManager.Common.Contracts
         /// <param name="employee">The employee object that is copied.</param>
         void CopyProperties(IEmployee employee)
         {
+            if (employee == null) throw new ArgumentNullException(nameof(employee));
+
             Id = employee.Id;
             CompanyId = employee.CompanyId;
             FirstName = employee.FirstName;

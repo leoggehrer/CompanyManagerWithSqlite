@@ -71,19 +71,6 @@ public class Company : EntityObject, ICompany
 
     #region methods
     /// <summary>
-    /// Copies the properties from another company instance.
-    /// </summary>
-    /// <param name="company">The company instance to copy properties from.</param>
-    public virtual void CopyProperties(ICompany company)
-    {
-        base.CopyProperties(company);
-
-        Name = company.Name;
-        Address = company.Address;
-        Description = company.Description;
-    }
-
-    /// <summary>
     /// Returns a string representation of the company.
     /// </summary>
     /// <returns>A string that represents the company.</returns>
@@ -205,19 +192,6 @@ public class Company : EntityObject, ICompany
 
     #region methods
     /// <summary>
-    /// Copies the properties from another company instance.
-    /// </summary>
-    /// <param name="company">The company instance to copy properties from.</param>
-    public virtual void CopyProperties(ICompany company)
-    {
-        base.CopyProperties(company);
-
-        Name = company.Name;
-        Address = company.Address;
-        Description = company.Description;
-    }
-
-    /// <summary>
     /// Returns a string representation of the company.
     /// </summary>
     /// <returns>A string that represents the company.</returns>
@@ -301,12 +275,50 @@ public static class Factory
     {
         var result = new CompanyContext();
 
-        result.Database.EnsureCreated();
-
         return result;
     }
+#if DEBUG
+        /// <summary>
+        /// Creates the database for the CompanyContext.
+        /// </summary>
+        public static void CreateDatabase()
+        {
+            var context = new CompanyContext();
+
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+        }
+
+        public static void InitDatabase()
+        {
+            var path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!;
+            var context = CreateContext();
+
+            CreateDatabase();
+
+            var companies = DataLoader.LoadCompaniesFromCsv(Path.Combine(path, "Data", "companies.csv"));
+
+            companies.ToList().ForEach(e => context.CompanySet.Add(e));
+            context.SaveChanges();
+
+            var customers = DataLoader.LoadCustomersFromCsv(Path.Combine(path, "Data", "customers.csv"));
+            customers.ToList().ForEach(e => context.CustomerSet.Add(e));
+
+            var employees = DataLoader.LoadEmployeesFromCsv(Path.Combine(path, "Data", "employees.csv"));
+            employees.ToList().ForEach(e => context.EmployeeSet.Add(e));
+
+            context.SaveChanges();
+        }
+#endif
 }
 ```
+
+#### Systemstruktur
+
+Die aktuelle Struktur des Systems ist in der folgenden Abbildung zusammengefasst:
+
+![Systemstructure (PA)](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/leoggehrer/CompanyManagerWithSqlite/master/diagrams/systemstructure.puml)
+
 
 ### Testen des Systems
 

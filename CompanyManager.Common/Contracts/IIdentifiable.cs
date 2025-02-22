@@ -1,4 +1,4 @@
-﻿//@BaseCode
+﻿//@CodeCopy
 namespace CompanyManager.Common.Contracts
 {
     /// <summary>

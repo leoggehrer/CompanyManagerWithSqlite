@@ -1,0 +1,97 @@
+@startuml systemstructure
+!theme cerulean-outline
+skinparam packageStyle folder
+
+package CompanyManager.Common {
+    package Contracts {
+        interface ICompany {
+            + Name : string
+            + Address : string
+            ---
+            + CopyProperties(company : ICompany) : void
+        }
+        interface ICustomer {
+            + CompanyId : int
+            + Name : string
+            + Email : string
+            ---
+            + CopyProperties(customer : ICustomer) : void
+        }
+        interface IEmployee {
+            + CompanyId : int
+            + FirstName : string
+            + LastName : string
+            + Email : string
+            ---
+            + CopyProperties(employee : IEmployee) : void
+        }
+        interface IIdentifiable {
+            + Id : int
+        }
+        ICompany -|> IIdentifiable
+        ICustomer -|> IIdentifiable
+        IEmployee -|> IIdentifiable
+    }
+}
+
+package CompanyManager.Logic {
+    package Contracts {
+        interface IContext {
+            + CompanySet : DbSet<Entities.Company>
+            + CustomerSet : DbSet<Entities.Customer>
+            + EmployeeSet : DbSet<Entities.Employee>
+            ---
+            + SaveChanges() : int
+        }
+    }
+    package DataContext {
+        class Factory {
+            + {static} CreateContext() : IContext
+            + {static} InitDatabase() : void
+            + {static} CreateDatabase() : void
+        }
+        class DataLoader {
+            + {static} LoadCompaniesFromCsv(string path) : void
+            + {static} LoadCustomersFromCsv(string path) : void
+            + {static} LoadEmployeesFromCsv(string path) : void
+        }
+    }
+    package Entities {
+        class EntityObject {
+            + Id : int
+        }
+        class Company {
+            + Name : string
+            + Address : string
+        }
+        class Customer {
+            + Id : int
+            + CompanyId : int
+            + Name : string
+            + Email : string
+        }
+        class Employee {
+            + Id : int
+            + CompanyId : int
+            + FirstName : string
+            + LastName : string
+            + Email : string
+        }
+        Company --|> EntityObject
+        Customer --|> EntityObject
+        Employee --|> EntityObject
+        Company --|> ICompany
+        Customer --|> ICustomer
+        Employee --|> IEmployee
+    }
+}
+
+package CompanyManager.ConApp {
+    class Program {
+
+    }
+}
+
+CompanyManager.Logic --> CompanyManager.Common : imports
+CompanyManager.ConApp --> CompanyManager.Common : imports
+@enduml

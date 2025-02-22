@@ -1,4 +1,4 @@
-﻿//@BaseCode
+﻿//@CodeCopy
 using System.Net;
 
 namespace CompanyManager.Common.Contracts
@@ -30,6 +30,8 @@ namespace CompanyManager.Common.Contracts
         /// <param name="customer">The customer object that is copied.</param>
         void CopyProperties(ICustomer customer)
         {
+            if (customer == null) throw new ArgumentNullException(nameof(customer));
+
             Id = customer.Id;
             CompanyId = customer.CompanyId;
             Name = customer.Name;

@@ -1,4 +1,4 @@
-﻿//@BaseCode
+﻿//@CodeCopy
 namespace CompanyManager.Common.Contracts
 {
     /// <summary>
@@ -15,6 +15,10 @@ namespace CompanyManager.Common.Contracts
         /// Gets or sets the address of the company.
         /// </summary>
         string? Address { get; set; }
+        /// <summary>
+        /// Gets or sets the description of the company.
+        /// </summary>
+        string? Description { get; set; }
         #endregion Properties
 
         #region Methods
@@ -24,9 +28,12 @@ namespace CompanyManager.Common.Contracts
         /// <param name="company">The company object that is copied.</param>
         void CopyProperties(ICompany company)
         {
+            if (company == null) throw new ArgumentNullException(nameof(company));
+
             Id = company.Id;
             Name = company.Name;
             Address = company.Address;
+            Description = company.Description;
         }
         #endregion Methods
     }
