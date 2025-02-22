@@ -319,7 +319,6 @@ Die aktuelle Struktur des Systems ist in der folgenden Abbildung zusammengefasst
 
 ![Systemstructure (PA)](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/leoggehrer/CompanyManagerWithSqlite/master/diagrams/systemstructure.puml)
 
-
 ### Testen des Systems
 
 Das Konsolenprogramm enthält ein Testmenü zum Testen der Funktionalität für die Entitäten **Company**, **Customer** und **Employee**. Implementieren Sie die Methoden welche noch nicht fertig gestellt sind. Sie erkennen die unvollständigen Methoden mit dem Inhalt:

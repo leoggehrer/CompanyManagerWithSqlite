@@ -88,7 +88,20 @@ package CompanyManager.Logic {
 
 package CompanyManager.ConApp {
     class Program {
+        # {static} Main(/*string[] args*/) : void
+        + {static} InitDatabase() : void
 
+        - {static} QueryCompanies(Logic.Contracts.IContext context) : void
+        - {static} AddCompany(Logic.Contracts.IContext context) : void
+        - {static} DeleteCompany(Logic.Contracts.IContext context) : void
+        - {static} PrintCustomers(Logic.Contracts.IContext context) : void
+        - {static} QueryCustomers(Logic.Contracts.IContext context) : void
+        - {static} AddCustomer(Logic.Contracts.IContext context) : void
+        - {static} DeleteCustomer(Logic.Contracts.IContext context) : void
+        - {static} PrintEmployees(Logic.Contracts.IContext context) : void
+        - {static} QueryEmployees(Logic.Contracts.IContext context) : void
+        - {static} AddEmployee(Logic.Contracts.IContext context) : void
+        - {static} DeleteEmployee(Logic.Contracts.IContext context) : void
     }
 }
 
